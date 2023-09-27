@@ -21,7 +21,6 @@ function h = getIR(y,Hinv)
 %   v.0.1   2017/08/19
 %   ***********************************************************************
 
-
 %% CHECK INPUT ARGUMENTS
 %
 %
@@ -31,9 +30,19 @@ if nargin ~= 2
     error('Wrong number of input arguments!')
 end
 
-
 %% APPLY INVERSE FILTER
 % 
 % 
 % -- ADD YOUR CODE HERE ----------------------------------------------
-h = 
+% if length(y) == length(Hinv)
+%     Y = fft(y);
+%     Hinv = Hinv(:);
+%     H = Y .* Hinv;
+%     h = ifft(H);
+% else
+%     h = cconv(y, ifft(Hinv));
+% end
+
+h = cconv(y, ifft(Hinv));
+
+

@@ -1,4 +1,4 @@
-function [ s ] = genMeasSig( Tsweep, fs, f0, f1, Tsilence, Tfadein,  Tfadeout, isExp )
+function s  = genMeasSig( Tsweep, fs, f0, f1, Tsilence, Tfadein,  Tfadeout, isExp )
 %Generates a measurement signal with the given parameters, using the
 %genChirp() function.
 % 
@@ -58,7 +58,7 @@ Nout = ceil(Tfadeout.*fs);
 
 % Reduce abrupt discontinuities at signal start and end by windowing, using
 % the fade() function.
-s = fade(s, Nin, Nout);
+s = fade(s, Nin, Nout, 1);
 
 % Pad with zeros using the padZeros() function. 
 s = padZeros(s, Nsilence);

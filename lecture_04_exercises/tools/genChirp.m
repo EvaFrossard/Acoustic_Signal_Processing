@@ -1,4 +1,4 @@
-function [x,t] = genChirp(fs,f0,T,f1,phi0,isExp)
+function [x,t] = genChirp(fs,f0,T,f1, phi0,isExp)
 %genChirp   Create a chirp signal
 % 
 %USAGE
@@ -70,7 +70,12 @@ if isExp
     % Instantaneous phase function
     % -- ADD YOUR CODE HERE ----------------------------------------------
     % k = f0 * exp((t/T) * log(f1/f0));
-    theta = ((f0*T)/(log(f1/f0))) * ((exp((t/T)*log(f1/f0)))-1);
+    % theta = ((f0*T)/(log(f1/f0))) * ((exp((t/T)*log(f1/f0)))-1);
+    
+    w0 = 2 * pi *f0;
+    w1 = 2 * pi * f1;
+    theta = (w0*T/log(w1/w0))*(exp((t/T)*log(w1/w0))-1);
+
 else
     % Rate of frequency change
     k = (f1 - f0) / T;

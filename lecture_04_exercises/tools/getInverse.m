@@ -38,7 +38,5 @@ end
 % Direct inverse in the frequency domain
 % -- ADD YOUR CODE HERE ----------------------------------------------
 H = fft(s);
-
 Hinv = 1./H;
-
 hinv = ifft(Hinv);

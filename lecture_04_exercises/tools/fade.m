@@ -1,4 +1,4 @@
-function x = fade(x, Nin, Nout)
+function x = fade(x, Nin, Nout, option)
 %fade   Apply a raised cosine window for fade in and fade out
 % 
 %USAGE
@@ -15,12 +15,13 @@ function x = fade(x, Nin, Nout)
 %% CHECK INPUT ARGUMENTS
 %
 % Check for proper input arguments
-if nargin < 1 || nargin > 3
+if nargin < 1 || nargin > 4
     help(mfilename);
     error('Wrong number of input arguments!')
 end
 
 % Set default values
+if nargin < 4 || isempty(option); option = 0; end
 if nargin < 3 || isempty(Nout); Nout = 10; end
 if nargin < 2 || isempty(Nin);  Nin  = 10; end
 
@@ -43,16 +44,21 @@ N = numel(x);
 
 % Create raised cosine windows for fade in and out
 % -- ADD YOUR CODE HERE --------------------------------------------------
-a = 0.5;
-b = 0.5;
-c = 0;
+if option == 0
+    wIn = hann(2*Nin); % fade in (use first half)
+    wOut = hann(2*Nout); % fade out (use second half)
 
-n = (0:N-1);
+    % Apply window
+    x(1:Nin) = x(1:Nin) .* wIn(1:Nin);
+    x(N-Nout+1:N) = x(N - Nout + 1 : N) .* wOut(Nout+1 : Nout*2);
 
-wIn = hann(2*Nin); % fade in
-wOut = hann(2*Nout); % fade out
+elseif option == 1
+    nin = (0 : Nin-1);
+    nout = (0 : Nout-1);
 
-% Apply window
-x(1:Nin) = x(1:Nin) .* wIn(1:Nin);
-x(end - Nout + 1 : end) = x(end - Nout + 1 : end) .* wOut(Nout+1 : end);
-
+    wIn = 0.5 * (1 - cos(pi * nin/(Nin-1)));
+    wOut = 0.5 * (1 + cos(pi * nout/(Nout-1)));
+    
+    x(1:Nin) = x(1:Nin) .* wIn(:);
+    x(N-Nout+1:N) = x(N-Nout+1:N) .* wOut(:);
+end

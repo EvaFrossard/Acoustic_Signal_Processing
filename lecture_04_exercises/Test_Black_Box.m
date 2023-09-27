@@ -20,7 +20,7 @@ fsHz = 48000;
 fileName = 'speech@24kHz.wav';
 
 % Select either 'system_a', 'system_b' or 'system_c'
-preset = 'system_a';
+preset = 'system_b';
 
 
 %% CREATE SIGNALS
@@ -48,7 +48,7 @@ title(strrep(preset,'_',' '))
 %% Play input and output sounds
 % 
 % 
-if 0
+if 1
     soundsc(x,fsHz);
     soundsc(y,fsHz);
 end

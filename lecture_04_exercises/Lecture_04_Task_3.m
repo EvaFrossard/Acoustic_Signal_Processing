@@ -35,6 +35,58 @@ s_exp = genMeasSig(Tsweep,fs,f0,f1,Tsilence,Tin,Tout,isExp);
 %% Create a measurement system
 % Implement the function below:
 h = getIR(s_exp, Hinv);
+T = length(h)/fs;
+ts = 1/fs;
+t = 0:ts:T-ts;
+stem(t', h);
 
 %% Investigate the black box system provided in blackBox.p (check Test_Black_Box.m)
+y_a = blackBox(s_exp, fs, 'system_a');
+ha = getIR(y_a, Hinv);
 
+T = length(ha)/fs;
+ts = 1/fs;
+t = 0:ts:T-ts;
+
+figure();
+plot(t',ha);
+xlim([0 0.01]);
+
+figure();
+semilogx(db(fft(ha)));
+xlim([10 5e4]);
+
+%%
+y_b = blackBox(s_exp, fs, 'system_b');
+hb = getIR(y_b, Hinv);
+
+T = length(hb)/fs;
+t = 0:ts:T-ts;
+
+% figure();
+% plot(t', hb);
+
+R = 100;
+M = 1024;
+w = genWin(1000, 'hann', 'periodic');
+[y_b_stft, t_y_b, f_y_b] = STFT(y_b, fs, w, R, M);
+plotSTFT(t_y_b, f_y_b, y_b_stft, fs, false, 60);
+
+[hb_stft, t_hb, f_hb] = STFT(hb, fs, w, R, M);
+plotSTFT(t_hb, f_hb, hb_stft, fs, false, 60);
+
+%% 
+y_c = blackBox(s_exp, fs, 'system_c');
+hc = getIR(y_c, Hinv);
+
+T = length(hc)/fs;
+t = 0:ts:T-ts;
+
+% figure();
+% plot(t', hc);
+
+[y_c_stft, t_y_c, f_y_c] = STFT(y_c, fs, w, R, M);
+plotSTFT(t_y_c, f_y_c, y_c_stft, fs, false, 60);
+
+[hc_stft, t_hc, f_hc] = STFT(hc, fs, w, R, M);
+plotSTFT(t_hc, f_hc, hc_stft, fs, false, 60);

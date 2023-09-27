@@ -36,20 +36,21 @@ isExp2 = true;
 % Create a exponential sweep
 [x_exp, t_exp] = genChirp(fs, f0, T, f1,phi0, isExp2);
 
-
 %% FREQUENCY ANALYSIS
 % Calculate magntiude spectra
 % Linear sweep
 N_lin = length(x_lin);
 X_lin = fft(x_lin);
 X_lin_db = 20*log10(abs(X_lin)); %db(X_lin); % FFT magnitude to dbs
-fv_lin = linspace((-fs/2), fs/2, N_lin); % vector = [-fs/2, fs/2] with N_lin values
+% fv_lin = linspace((-fs/2), fs/2, N_lin); % vector = [-fs/2, fs/2] with N_lin values
+fv_lin = (0:length(X_lin)-1) .* fs/length(X_lin);
 
 % Exponential sweep
 N_exp = length(x_exp);
 X_exp = fft(x_exp);
 X_exp_db = 20*log10(abs(X_exp)); %db(X_exp);
-fv_exp = linspace((-fs/2), fs/2, N_exp);
+% fv_exp = linspace((-fs/2), fs/2, N_exp);
+fv_exp = (0:length(X_exp)-1) .* (fs/length(X_exp));
 
 % Calculat STFTs
 [X_lin_stft, t_lin1, f_lin1] = STFT(x_lin,fs, w, R, M);
@@ -71,7 +72,7 @@ title('Exponential sweep Time-Domain');
 xlabel('Time (s)');
 ylabel('Amplitude');
 
-
+%%
 % Plot the magnitude spectra DFT
 figure(2);
 subplot(2,1,1);
@@ -79,8 +80,9 @@ plot(fv_lin, abs(X_lin));
 xlim([0 fs/2]);
 
 subplot(2,1,2);
-plot(fv_exp, abs(X_exp));
+plot(fv_exp,abs(X_exp));
 xlim([0 fs/2]);
+%%
 
 % Pot the magntiude spectra dB
 figure(3);
@@ -99,6 +101,6 @@ xlabel('Freq (Hz)');
 ylabel('Magntiude (dB)');
 
 % Plot the STFTs
-h = plotSTFT(t_lin1, f_lin1, X_lin_stft, fs, true)
+h = plotSTFT(t_lin1, f_lin1, X_lin_stft, fs, false);
 
-h1 = plotSTFT(t_exp1, f_exp1, X_exp_stft, fs, true)
+h1 = plotSTFT(t_exp1, f_exp1, X_exp_stft, fs, true);
